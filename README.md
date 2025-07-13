@@ -30,6 +30,7 @@ A simple CRUD (Create, Read, Update, Delete) application for managing card bank 
 
 3. **Run the application:**
     ```bash
+    cp .env.example .env
     docker compose up -d --build
     ```
 

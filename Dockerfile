@@ -10,11 +10,11 @@ COPY ./scripts /scripts
 
 WORKDIR /code
 
-ARG DEV=false
+ARG LOCAL=false
 
 RUN uv venv --seed && \
     . .venv/bin/activate && \
-    if [ "$DEV" = "true" ]; then \
+    if [ "$LOCAL" = "true" ]; then \
         echo "--- Installing all dependencies for development ---" && \
         uv sync --locked; \
     else \
