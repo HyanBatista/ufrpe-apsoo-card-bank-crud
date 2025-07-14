@@ -4,7 +4,7 @@ from typing import Optional
 from sqlmodel import Field, SQLModel
 
 
-class CardBase(SQLModel):
+class CreditCardBase(SQLModel):
     number: str
     holder: str
     expiration: date = Field(default=date.today())
@@ -12,7 +12,7 @@ class CardBase(SQLModel):
     credit_limit: float = 0.0
 
 
-class CardCreate(CardBase):
+class CreditCardCreate(CreditCardBase):
     """Schema for creating a new credit card."""
 
     account_id: Optional[int] = Field(
@@ -20,13 +20,13 @@ class CardCreate(CardBase):
     )
 
 
-class CardRead(CardBase):
+class CreditCardRead(CreditCardBase):
     id: int
     credit_limit: float = 0.0
     is_active: bool = True
 
 
-class CardUpdate(SQLModel):
+class CreditCardUpdate(SQLModel):
     holder: Optional[str] = Field(default=None)
     credit_limit: Optional[float] = Field(default=None)
     expiration: Optional[date] = Field(default=None)

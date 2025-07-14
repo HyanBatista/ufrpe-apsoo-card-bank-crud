@@ -5,12 +5,18 @@ from sqlmodel import Session, select
 from app.db.models.card import CreditCard
 
 
-class CardRepository:
+class CreditCardRepository:
     def __init__(self, session: Session):
         self.session = session
 
     def create(
-        self, number: str, holder: str, expiration: date, cvv: str
+        self,
+        number: str,
+        holder: str,
+        expiration: date,
+        cvv: str,
+        credit_limit: float,
+        account_id: int,
     ) -> CreditCard:
         """Create a new credit card."""
         card = CreditCard(
@@ -18,6 +24,8 @@ class CardRepository:
             holder=holder,
             experation=expiration,
             cvv=cvv,
+            credit_limit=credit_limit,
+            account_id=account_id,
         )
         self.session.add(card)
         self.session.commit()
