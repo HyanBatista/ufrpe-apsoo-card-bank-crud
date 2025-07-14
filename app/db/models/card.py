@@ -10,8 +10,10 @@ class CreditCard(SQLModel, table=True):
         index=True,
         description="Unique identifier for the bank account",
     )
-    account_id: Optional[str] = Field(
-        default=None, description="Associated account identifier"
+    account_id: int = Field(
+        default=None,
+        description="Associated account identifier",
+        foreign_key="bankaccount.id",
     )
     number: str = Field(default="", description="Credit card number")
     holder: str = Field(default="", description="Name of the cardholder")
