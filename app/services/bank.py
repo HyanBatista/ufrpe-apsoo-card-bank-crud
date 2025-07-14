@@ -1,6 +1,6 @@
-from app.schemas.bank import BankAccountCreate, BankAccountRead
-from app.db.repositories.bank import BankAccountRepository
 from app.db.models.bank import BankAccount
+from app.db.repositories.bank import BankAccountRepository
+from app.schemas.bank import BankAccountCreate, BankAccountRead
 
 
 class CreateBankAccountService:
@@ -26,3 +26,35 @@ class ReadBankAccountService:
         """Retrieve all bank accounts."""
         accounts = self.repository.get_all(skip=skip, offset=limit)
         return [BankAccountRead.model_validate(account) for account in accounts]
+
+
+class UpdateBankAccountService:
+    def __init__(self, repository: BankAccountRepository):
+        self.repository = repository
+
+    def exec(
+        self,
+        account_id: int,
+        owner_name: str | None = None,
+        account_number: str | None = None,
+        balance: float | None = None,
+    ) -> BankAccountRead | None:
+        """Update an existing bank account."""
+        updated_account = self.repository.update(
+            account_id=account_id,
+            owner_name=owner_name,
+            account_number=account_number,
+            balance=balance,
+        )
+        if updated_account:
+            return BankAccountRead.model_validate(updated_account)
+        return None
+
+
+class DeleteBankAccountService:
+    def __init__(self, repository: BankAccountRepository):
+        self.repository = repository
+
+    def exec(self, account_id: int) -> bool:
+        """Delete a bank account by its ID."""
+        return self.repository.delete(account_id=account_id)
