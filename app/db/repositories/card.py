@@ -2,7 +2,7 @@ from datetime import date
 
 from sqlmodel import Session, select
 
-from app.db.models.card import CreditCard
+from app.db.models.card import CreditCard, DebitCard
 
 
 class CreditCardRepository:
@@ -76,6 +76,63 @@ class CreditCardRepository:
         if not card:
             return False
 
+        self.session.delete(card)
+        self.session.commit()
+        return True
+
+
+class DebitCardRepository:
+    def __init__(self, session: Session):
+        self.session = session
+
+    def create(
+        self,
+        account_id: int,
+        number: str,
+        holder: str,
+        expiration: date,
+        cvv: str,
+        is_active: bool = True,
+    ) -> DebitCard:
+        """Create a new debit card."""
+        card = DebitCard(
+            account_id=account_id,
+            number=number,
+            holder=holder,
+            expiration=expiration,
+            cvv=cvv,
+            is_active=is_active,
+        )
+        self.session.add(card)
+        self.session.commit()
+        self.session.refresh(card)
+        return card
+
+    def get_all(self, skip=0, offset=10) -> list[DebitCard]:
+        """Retrieve all debit cards."""
+        return self.session.exec(select(DebitCard).offset(skip).limit(offset)).all()
+
+    def get_by_id(self, card_id: int) -> DebitCard | None:
+        """Retrieve a debit card by its ID."""
+        return self.session.get(DebitCard, card_id)
+
+    def update(self, card_id: int, **kwargs) -> DebitCard | None:
+        """Update an existing debit card."""
+        card = self.get_by_id(card_id)
+        if not card:
+            return None
+        for key, value in kwargs.items():
+            if hasattr(card, key):
+                setattr(card, key, value)
+        self.session.commit()
+        self.session.refresh(card)
+        return card
+
+    def delete(self, card_id: int) -> bool:
+        """Delete a debit card by its ID."""
+        card = self.get_by_id(card_id)
+        if not card:
+            return False
         self.session.delete(card)
         self.session.commit()
         return True

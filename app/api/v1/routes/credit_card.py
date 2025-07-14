@@ -12,8 +12,8 @@ from app.services.card import (
 )
 
 router = APIRouter(
-    prefix="/card",
-    tags=["card"],
+    prefix="/credit_card",
+    tags=["credit_card"],
     responses={404: {"description": "Not found"}},
 )
 
