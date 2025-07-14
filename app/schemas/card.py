@@ -58,6 +58,7 @@ class CreditCardRead(CreditCardBase):
 
 
 class CreditCardUpdate(SQLModel):
+    number: Optional[str] = Field(default=None)
     holder: Optional[str] = Field(default=None)
     credit_limit: Optional[float] = Field(default=None)
     expiration: Optional[date] = Field(default=None)

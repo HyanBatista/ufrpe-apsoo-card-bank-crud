@@ -3,7 +3,7 @@ from sqlmodel import Session
 
 from app.db.repositories.card import CreditCardRepository
 from app.db.session import get_session
-from app.schemas.card import CreditCardCreate, CreditCardRead
+from app.schemas.card import CreditCardCreate, CreditCardRead, CreditCardUpdate
 from app.services.card import (
     CreateCreditCardService,
     DeleteCreditCardService,
@@ -50,7 +50,7 @@ def create_credit_card(card: CreditCardCreate, session: Session = Depends(get_se
 @router.patch("/{card_id}", response_model=CreditCardRead | None)
 def update_credit_card(
     card_id: int,
-    card: CreditCardCreate,
+    card: CreditCardUpdate,
     session: Session = Depends(get_session),
 ):
     """Update an existing credit card."""
