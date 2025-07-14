@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from app.api.v1.routes import bank
+from app.api.v1.routes import bank, card
 from app.db.session import lifespan
 
 app = FastAPI(
@@ -15,3 +15,4 @@ app = FastAPI(
 
 
 app.include_router(bank.router, prefix="/api/v1", tags=["bank"])
+app.include_router(card.router, prefix="/api/v1", tags=["card"])

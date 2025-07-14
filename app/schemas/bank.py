@@ -23,7 +23,7 @@ class BankAccountCreate(BankAccountBase):
     pass
 
 
-class BankAccountUpdate(BankAccountBase):
+class BankAccountUpdate(SQLModel):
     owner_name: Optional[str] = None
     account_number: Optional[str] = None
     balance: Optional[float] = None
