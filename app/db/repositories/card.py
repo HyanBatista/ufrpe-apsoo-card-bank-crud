@@ -39,3 +39,43 @@ class CreditCardRepository:
     def get_by_id(self, card_id: int) -> CreditCard | None:
         """Retrieve a credit card by its ID."""
         return self.session.get(CreditCard, card_id)
+
+    def update(
+        self,
+        card_id: int,
+        number: str | None = None,
+        holder: str | None = None,
+        expiration: date | None = None,
+        cvv: str | None = None,
+        credit_limit: float | None = None,
+    ) -> CreditCard | None:
+        """Update an existing credit card."""
+        card = self.get_by_id(card_id)
+        if not card:
+            return None
+
+        if number is not None:
+            card.number = number
+        if holder is not None:
+            card.holder = holder
+        if expiration is not None:
+            card.expiration = expiration
+        if cvv is not None:
+            card.cvv = cvv
+        if credit_limit is not None:
+            card.credit_limit = credit_limit
+
+        self.session.add(card)
+        self.session.commit()
+        self.session.refresh(card)
+        return card
+
+    def delete(self, card_id: int) -> bool:
+        """Delete a credit card by its ID."""
+        card = self.get_by_id(card_id)
+        if not card:
+            return False
+
+        self.session.delete(card)
+        self.session.commit()
+        return True

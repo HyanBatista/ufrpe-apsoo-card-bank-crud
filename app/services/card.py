@@ -30,3 +30,39 @@ class ReadCreditCardService:
         """Retrieve all credit cards."""
         cards = self.repository.get_all(skip=skip, offset=limit)
         return [CreditCardRead.model_validate(card.model_dump()) for card in cards]
+
+
+class UpdateCreditCardService:
+    def __init__(self, repository: CreditCardRepository):
+        self.repository = repository
+
+    def exec(
+        self,
+        card_id: int,
+        number: str | None = None,
+        holder: str | None = None,
+        expiration: date | None = None,
+        cvv: str | None = None,
+        credit_limit: float | None = None,
+    ) -> CreditCardRead | None:
+        """Update an existing credit card."""
+        updated_card = self.repository.update(
+            card_id=card_id,
+            number=number,
+            holder=holder,
+            expiration=expiration,
+            cvv=cvv,
+            credit_limit=credit_limit,
+        )
+        if updated_card:
+            return CreditCardRead.model_validate(updated_card.model_dump())
+        return None
+
+
+class DeleteCreditCardService:
+    def __init__(self, repository: CreditCardRepository):
+        self.repository = repository
+
+    def exec(self, card_id: int) -> bool:
+        """Delete a credit card by its ID."""
+        return self.repository.delete(card_id=card_id)
